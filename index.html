@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phasmophobia Matrix - Español</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="nav-item active">Fantasmas</div>
+    </header>
+
+    <!-- Main Container Layout -->
+    <main class="main-container">
+
+        <!-- Ghosts Grid View -->
+        <section class="ghosts-section">
+            <div id="ghostGrid" class="ghost-grid">
+                <!-- Generado dinámicamente con JS -->
+            </div>
+        </section>
+
+        <!-- Right Control Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Cuaderno</span>
+                <button class="btn-action btn-reset" onclick="resetAll()">Reiniciar</button>
+            </div>
+
+            <p class="instructions">
+                Click para encontrar (Verde) | Doble Click para descartar (Rojo) | Click para resetear.
+            </p>
+
+            <!-- List of Evidences -->
+            <div id="evidenceList" class="evidence-list">
+                <!-- Generado dinámicamente con JS -->
+            </div>
+        </aside>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
