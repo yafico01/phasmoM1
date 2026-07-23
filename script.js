@@ -9,30 +9,40 @@ const EVIDENCE_TYPES = [
     { id: "temperatura", name: "Temperaturas Heladas", icon: "🌡️" }
 ];
 
-// Base de Datos de Fantasmas
+// Base de Datos Completa de Fantasmas (30 en total)
 const GHOSTS_DATA = [
+    // --- FANTASMAS ACTUALIZADOS / NUEVOS ---
     {
         name: "Asuang",
         isNew: true,
         evidences: ["temperatura", "escritura", "dots"],
-        strength: "Cuando detecta a su objetivo, se mueve más rápido para perseguirlo.",
+        strength: "Cuando detecta a su objetivo, se mueve mas rapido para perseguirlo.",
         weakness: "Prefiere perseguir que buscar.",
-        notes: "Si te escondes en un escondite oficial aunque tengas la puerta abierta o seas descubierto, no podrá matarte y acabará el ataque inmediatamente."
+        interestingData: [
+            "Si te escondes en un escondite oficial aunque tengas las puerta abiertas o sea descubierto, no podrá matarte y acabara el ataca en ese mismo momento."
+        ]
     },
     {
         name: "Banshee",
         evidences: ["huellas", "orbes", "dots"],
         strength: "Debilita a su objetivo antes de atacarlo.",
         weakness: "Puede emitir un grito fantasmal a través del Micrófono Parabólico.",
-        notes: "Siempre será mujer. Marca a un solo jugador como objetivo. Puede iniciar cacería si la cordura del objetivo cae por debajo del 40%."
+        interestingData: [
+            "Siempre sera una mujer de nombre y de skin.",
+            "Marca a un solo jugador como objetivo.",
+            "Puede iniciar una cacería si la cordura del jugador objetivo cae por debajo del 40%. Si el objetivo está fuera de la casa, actuará como un fantasma normal."
+        ]
     },
     {
         name: "Dayan",
         isNew: true,
         evidences: ["emf", "orbes", "box"],
-        strength: "Obtiene fuerza si los jugadores 'bailan' o se mueven cerca de ella (~10m).",
-        weakness: "Pierde fuerza si los jugadores cercanos están inmóviles.",
-        notes: "Ataca al 65% de cordura si un jugador se mueve cerca de ella en su habitación. Si se quedan quietos, no ataca hasta el 50%."
+        strength: 'Obtiene fuerza si los jugadores "Bailan" cerca de ella (10m aprox).',
+        weakness: "Pierde fuerza si los jugadores cercanos estan inmoviles.",
+        interestingData: [
+            "Ataca a una cordura del 65% si un jugador se mueve cerca de el en su habitación.",
+            "Si los jugadores permanecen quietos, no ataca hasta el 50%."
+        ]
     },
     {
         name: "Deildegast",
@@ -40,58 +50,209 @@ const GHOSTS_DATA = [
         evidences: ["emf", "escritura", "dots"],
         strength: "Al inicio de la investigación, suele ser más agresivo y activo de lo normal.",
         weakness: "Se vuelve más lento a medida que se mueven objetos o elementos en su entorno.",
-        notes: "Su comportamiento está ligado a objetos fuera de lugar; mueve objetos o interactúa con ellos para ralentizarlo."
+        interestingData: [
+            "Su comportamiento está ligado a objetos fuera de lugar; para ralentizarlo durante la partida, puedes mover los elementos o interactuar con ellos."
+        ]
     },
     {
         name: "Demonio",
         evidences: ["huellas", "escritura", "temperatura"],
-        strength: "Iniciará ataques más a menudo que otros fantasmas.",
-        weakness: "Será menos agresivo si un crucifijo se encuentra cerca de él.",
-        notes: "Ataques constantes (20s entre cacerías). Incienso en cacería lo detiene por 60s. Usar Ouija no quita cordura."
+        strength: "Iniciara ataques mas a menudo que otros fantasmas.",
+        weakness: "Sera menos agresivo si un crucifico se encuentra creca de el.",
+        interestingData: [
+            "Ataques constante. 20 seg entre cada cacería en lugar de 25 seg.",
+            "Usar incienso en caceria detiene sus ataques por 60 seg, en lugar de los 90 seg.",
+            "Obtener respuesta en la Ouija no quita cordura."
+        ]
     },
     {
         name: "Deogen",
         evidences: ["box", "escritura", "dots"],
         strength: "Siempre sabe exactamente dónde te escondes, haciendo inútiles los escondites.",
         weakness: "Se desplaza muy despacio cuando se acerca a un jugador.",
-        notes: "En Pesadilla/Demencial siempre tiene Caja Espectral. A gran distancia es extremada velocidad, de cerca desacelera muchísimo."
+        interestingData: [
+            "En dificultad pesadilla o superior(1 o 2 pruebas), siempre tendra Caja Espetral como prueba.",
+            "Estando lejos de un jugador, su velocidad es extrema, al acercase, desacelera.",
+            "Ataque en 40% promedio de cordura."
+        ]
     },
     {
         name: "Gallu",
         isNew: true,
         evidences: ["emf", "huellas", "box"],
-        strength: "El uso de equipamiento de protección (crucifijos, incienso, sal) lo enfurece y debilita temporalmente el efecto de estos.",
-        weakness: "Entrar en su estado de furia lo termina agotando por completo, volviéndolo muy débil tras terminar una cacería.",
-        notes: "3 Estados: Normal (caza al 50%), Enfurecido (caza al 60% e inmune a sal) y Agotado (caza al 40%)."
+        strength: "El uso de equipamiento de protección (crucifijos, incienso, sal) lo enfurece y debilita temporalmente el efecto de estos objetos.",
+        weakness: "Entrar en su estado de furia lo termina agotando por completo, volviéndolo mucho más débil tras terminar una cacería.",
+        interestingData: [
+            "Tiene tres estados: Normal, Enfurecido y Agotado.",
+            "En estado normal los ataques inician al 50% promedio de cordura, Enojado al 60% y en Agotado al 40%.",
+            "Mientras está enfurecido, es inmune a la sal (no la pisará)."
+        ]
     },
     {
         name: "Goryo",
         evidences: ["emf", "huellas", "dots"],
         strength: "Solo mostrará su silueta en el proyector D.O.T.S. a través de la lente de una cámara de video.",
         weakness: "Rara vez se le ve lejos de su lugar de deceso original.",
-        notes: "En Pesadilla/Demencial siempre tiene D.O.T.S. No puede cambiar de habitación favorita. Ataca al 50% de cordura."
+        interestingData: [
+            "En dificultad pesadilla o superior(1 o 2 pruebas), siempre tedra proyector D.O.T.S. como prueba.",
+            "No puede cambiar de habitación favorita bajo ninguna circunstancia.",
+            "Ataca a partir del 50 % de cordura promedia."
+        ]
     },
     {
         name: "Hantu",
         evidences: ["huellas", "orbes", "temperatura"],
         strength: "Las temperaturas bajas le permiten moverse a velocidades muy rápidas.",
         weakness: "Se mueve extremadamente lento en zonas cálidas o templadas.",
-        notes: "Nunca enciende el cuadro eléctrico. Exhala vaho frío durante cacerías con breaker apagado. Siempre tiene Temperaturas Heladas."
+        interestingData: [
+            "Nunca enciende el cuadro electrico.",
+            "Si el cuadro electrico esta apagado, exhalará un vaho o aliento frío visible por la boca durante las cacerías.",
+            "Le gusta mucho apagar las luces, el cuadro electrico o hacer explotar los focos para bajar la temperatura.",
+            "Ataca al 50% de cordura promedia.",
+            "En dificultad pesadilla o superior(1 o 2 pruebas), siempre tendra temperaturas heladas."
+        ]
     },
     {
         name: "Jinn",
         evidences: ["emf", "huellas", "temperatura"],
         strength: "Viajará a una velocidad significativamente mayor si estás lejos y la caja de fusibles está encendida.",
-        weakness: "Apagar el cuadro eléctrico evitará que use sus habilidades.",
-        notes: "Nunca apagará el cuadro eléctrico. Frena en seco a menos de 3m del jugador. Drena 25% de cordura con habilidad de cuadro."
+        weakness: "Apagar el cuadro electrico evitará que use sus habilidades.",
+        interestingData: [
+            "Nunca apagará el cuadro electrico.",
+            "Si el cuadro electrico está encendido, y ve un jugador desde lejos en una cacería, aunmentara su velocidad, pero frenará en seco al acercarse a menos de 3 metros del jugador.",
+            "Si interactua con el cuadro electrico(sin apagarlo) activara el EMF y drenara la cordura de todos los jugadores en su habitación o cerca de el un 25%."
+        ]
     },
     {
         name: "Kormos",
         isNew: true,
         evidences: ["orbes", "box", "huellas"],
-        strength: "Audición increíblemente aguda; detecta tus pasos desde lejos durante las cacerías y ataca antes si corres cerca.",
+        strength: "Su audición es increíblemente aguda; detecta tus pasos desde lejos durante las cacerías y ataca antes si corres cerca de él.",
         weakness: "Es un fantasma prácticamente ciego.",
-        notes: "Fantasma ciego. Si te quedas totalmente quieto no puede verte. Ataca al 50% normalmente, o al 70% si corres cerca de él."
+        interestingData: [
+            "Es un fantasma ciego pero tiene buen oído. Si te quedas quieto no es capaz de verte y matarte.",
+            "Ataca en promedio de cordura del 50%, pero si corres en su habitacion, puede atacar al 70%.",
+            "Detecta a los jugadores a una distancia de 10m si van agachados, 15m si caminan normal y 30m si corren."
+        ]
+    },
+    {
+        name: "Pesadilla (Mare)",
+        evidences: ["box", "orbes", "escritura"],
+        strength: "Las habitaciones a oscuras aumentan notablemente sus probabilidades de atacar.",
+        weakness: "Encender las luces de su entorno reducirá su agresividad de forma drástica.",
+        interestingData: [
+            "Ataca en promedio de cordura del 40% si las luces estan encendidan, sino, atacara al 60%.",
+            "No puede encender luces con el interruptor, pero si la Tv y el PC.",
+            "Al encender un jugador las luces de un cuarto, podra apagarla al instante que el jugador accione el interruptor."
+        ]
+    },
+    {
+        name: "Moroi",
+        evidences: ["box", "escritura", "temperatura"],
+        strength: "Cuanto menor sea la cordura de las víctimas, más fuerte y rápido se volverá el Moroi.",
+        weakness: "Padecen de hiperosmia extrema, haciendo que el incienso los ciegue por mucho más tiempo durante las cacerías.",
+        interestingData: [
+            "Su umbral base para iniciar una cacería es a partir del 50 % de cordura media del equipo.",
+            "El incienso lo ciega durante 7,5 segundos en lugar de los 5 habituales.",
+            "La Caja Espectral y parabolico \"maldice\" al jugador, duplicando su pérdida de cordura pasiva.",
+            "La maldición se elimina por completo consumiendo pastillas de cordura."
+        ]
+    },
+    {
+        name: "Myling",
+        evidences: ["emf", "huellas", "escritura"],
+        strength: "Es conocido por ser un cazador extremadamente silencioso.",
+        weakness: "Es un fantasma muy ruidoso en el plano paranormal, produciendo sonidos y susurros constantes.",
+        interestingData: [
+            "Durante las cacerías, solo escucharás sus pasos cuando ya esté a menos de 12 metros de ti.",
+            "Produce ruidos vocales, golpes y suspiros a través del micrófono parabólico con una frecuencia muchísimo mayor que el resto de los fantasmas.",
+            "Ataca a partir del 50 % de cordura media."
+        ]
+    },
+    {
+        name: "Obake",
+        evidences: ["emf", "huellas", "orbes"],
+        strength: "Al interactuar con el entorno, tiene la capacidad única de ocultar sus rastros.",
+        weakness: "A veces cambiarán de forma, revelando asi pruebas indispensables.",
+        interestingData: [
+            "Tiene un 25 % de probabilidad de no dejar huella tras tocar una puerta, interruptor o ventana.",
+            "Cuenta con un 16.7 % de probabilidad de dejar una huella única de 6 dedos en las puertas, o una huella doble en interruptores.",
+            "En caceria puede cambiar de skin mientras se mueve.",
+            "Ataca a partir del 50 % de cordura media."
+        ]
+    },
+    {
+        name: "Obambo",
+        isNew: true,
+        evidences: ["escritura", "huellas", "dots"],
+        strength: "En su estado agresivo, iniciara cacerías de forma muy rápida.",
+        weakness: "Cuando esta calmado, tarda más en comenzar una cacería y su de movimiento se vuelve más lento y fáciles de rastrear.",
+        interestingData: [
+            "Ataca a una cordura promedio de 65%.",
+            "Puede cambiar su velocidad en mitad de la cacerias.",
+            "El cambio de velocidad es fijo, de lento a rapido y viceversa cada 2 minutos aprox."
+        ]
+    },
+    {
+        name: "Oni",
+        evidences: ["emf", "temperatura", "dots"],
+        strength: "Son mas activos con varias personas cerca y drenaran mas cordura al manifestarse.",
+        weakness: "En caceria, desaparecen con menor frecuencia.",
+        interestingData: [
+            "Son completamente incapaces de generar el evento de \"bola\".",
+            "En las Manifestaciones, son mas fisicas y drenan el 20% en lugar del 10% de cordura.",
+            "En caceria son bastantes visibles."
+        ]
+    },
+    {
+        name: "Onryo",
+        evidences: ["box", "orbes", "temperatura"],
+        strength: "Apagar una llama puede provocar que este fantasma ataque inmediatamente.",
+        weakness: "Cuando se siente amenazado por el fuego, el fantasma es menos propenso a cazar.",
+        interestingData: [
+            "Su umbral de cacería normal es del 60 % de cordura media.",
+            "Cada vela apagada tiene un 50% de probabilidad de iniciar un ataque.",
+            "Al apagar la tercera vela, iniciará una cacería garantizada si no hay más fuego cerca.",
+            "Prioriza apagar una llama antes de consumir un crucifijo real."
+        ]
+    },
+
+    // --- RESTANTES DE LA LISTA ORIGINAL (PROCESADOS AL NUEVO FORMATO) ---
+    {
+        name: "Aparecido (Revenant)",
+        evidences: ["orbes", "escritura", "temperatura"],
+        strength: "Se mueve a velocidad significativamente alta cuando persigue a una víctima.",
+        weakness: "Esconderse del Aparecido hará que se mueva muy lentamente.",
+        interestingData: [
+            "Velocidad extrema cuando ve a un jugador, súper lento cuando pierde la visión."
+        ]
+    },
+    {
+        name: "Espectro (Wraith)",
+        evidences: ["emf", "box", "dots"],
+        strength: "Casi nunca toca el suelo y no deja huellas al pisar sal.",
+        weakness: "Tiene una reacción tóxica a la sal.",
+        interestingData: [
+            "Puede teletransportarse al lado de un jugador aleatorio fuera de cacería generando lectura EMF 2/5."
+        ]
+    },
+    {
+        name: "Espíritu (Spirit)",
+        evidences: ["emf", "box", "escritura"],
+        strength: "No tiene fortalezas particulares.",
+        weakness: "Usar incienso cerca de él lo detendrá e impedirá que ataque durante un largo tiempo (180s).",
+        interestingData: [
+            "El incienso evita cacerías por 180 segundos (en vez de 90s)."
+        ]
+    },
+    {
+        name: "Los Gemelos (The Twins)",
+        evidences: ["emf", "box", "temperatura"],
+        strength: "Cualquiera de los dos gemelos puede enfadarse e iniciar un ataque.",
+        weakness: "Interactúan con el entorno al mismo tiempo.",
+        interestingData: [
+            "Un gemelo es más lento pero está en la sala principal; el otro es más rápido y ataca desde lejos."
+        ]
     },
     {
         name: "Mímico",
@@ -99,119 +260,63 @@ const GHOSTS_DATA = [
         fakeEvidence: "orbes",
         strength: "Pueden imitar la conducta de cualquier otro fantasma.",
         weakness: "Aparecen orbes espectrales en la habitación del fantasma como cuarta prueba falsa.",
-        notes: "Presenta siempre Caja Espectral, Ultravioleta, Temperaturas Heladas + Orbes Espectrales permanentes."
-    },
-    {
-        name: "Pesadilla (Mare)",
-        evidences: ["box", "orbes", "escritura"],
-        strength: "Las habitaciones a oscuras aumentan notablemente sus probabilidades de atacar.",
-        weakness: "Encender las luces de su entorno reducirá su agresividad de forma drástica.",
-        notes: "Ataca al 60% en la oscuridad / 40% con luces encendidas. No puede encender luces, pero sí apagar de inmediato los interruptores."
-    },
-    {
-        name: "Aparecido (Revenant)",
-        evidences: ["orbes", "escritura", "temperatura"],
-        strength: "Se mueve a velocidad significativamente alta cuando persigue a una víctima.",
-        weakness: "Esconderse del Aparecido hará que se mueva muy lentamente.",
-        notes: "Velocidad extrema cuando ve a un jugador, súper lento cuando pierde la visión."
-    },
-    {
-        name: "Espectro (Wraith)",
-        evidences: ["emf", "box", "dots"],
-        strength: "Casi nunca toca el suelo y no deja huellas al pisar sal.",
-        weakness: "Tiene una reacción tóxica a la sal.",
-        notes: "Puede teletransportarse al lado de un jugador aleatorio fuera de cacería generando lectura EMF 2/5."
-    },
-    {
-        name: "Espíritu (Spirit)",
-        evidences: ["emf", "box", "escritura"],
-        strength: "No tiene fortalezas particulares.",
-        weakness: "Usar incienso cerca de él lo detendrá e impedirá que ataque durante un largo tiempo (180s).",
-        notes: "El incienso evita cacerías por 180 segundos (en vez de 90s)."
+        interestingData: [
+            "Presenta siempre Caja Espectral, Ultravioleta, Temperaturas Heladas + Orbes Espectrales permanentes."
+        ]
     },
     {
         name: "Poltergeist",
         evidences: ["box", "huellas", "escritura"],
         strength: "Puede lanzar múltiples objetos a la vez con gran fuerza.",
         weakness: "Se vuelve ineficaz en habitaciones vacías sin objetos para lanzar.",
-        notes: "Lanza varios objetos reduciendo la cordura de los jugadores cercanos."
-    },
-    {
-        name: "Sombra (Shade)",
-        evidences: ["emf", "escritura", "temperatura"],
-        strength: "Es muy difícil de encontrar debido a su timidez.",
-        weakness: "No iniciará una cacería si hay varias personas cerca.",
-        notes: "Rara vez realiza eventos de fantasma si hay más de 1 persona en la habitación."
-    },
-    {
-        name: "Oni",
-        evidences: ["emf", "temperatura", "dots"],
-        strength: "Es más activo cuando hay gente cerca y se desplaza rápidamente.",
-        weakness: "Son muy activos, lo que facilita su identificación.",
-        notes: "Parpadea menos tiempo (más visible) durante las cacerías. No realiza eventos de vaho de humo."
-    },
-    {
-        name: "Yurei",
-        evidences: ["orbes", "temperatura", "dots"],
-        strength: "Suele tener una gran influencia sobre la cordura de las personas.",
-        weakness: "Usar incienso en su habitación lo atrapa en ella por 90 segundos.",
-        notes: "Puede cerrar puertas de golpe quitando un 15% de cordura instantáneamente."
-    },
-    {
-        name: "Yokai",
-        evidences: ["box", "orbes", "dots"],
-        strength: "Hablar cerca del Yokai lo enfurece y aumenta la probabilidad de ataque.",
-        weakness: "Durante una cacería solo puede escuchar voces a corta distancia (~2.5m).",
-        notes: "Puede atacar al 80% de cordura si se habla cerca de él."
-    },
-    {
-        name: "Myling",
-        evidences: ["emf", "huellas", "escritura"],
-        strength: "Es muy silencioso cuando caza.",
-        weakness: "Emite sonidos paranormales más frecuentemente en el Micrófono Parabólico.",
-        notes: "Sus pasos en cacería solo se escuchan a corta distancia."
-    },
-    {
-        name: "Onryo",
-        evidences: ["box", "orbes", "temperatura"],
-        strength: "Apagar una llama puede hacer que ataque inmediatamente.",
-        weakness: "Cualquier fuente de fuego cercana actúa como un crucifijo.",
-        notes: "Al apagar la 3ª vela/fuego, lanzará una cacería sin importar la cordura."
-    },
-    {
-        name: "Los Gemelos (The Twins)",
-        evidences: ["emf", "box", "temperatura"],
-        strength: "Cualquiera de los dos gemelos puede enfadarse e iniciar un ataque.",
-        weakness: "Interactúan con el entorno al mismo tiempo.",
-        notes: "Un gemelo es más lento pero está en la sala principal; el otro es más rápido y ataca desde lejos."
+        interestingData: [
+            "Lanza varios objetos reduciendo la cordura de los jugadores cercanos."
+        ]
     },
     {
         name: "Raiju",
         evidences: ["emf", "orbes", "dots"],
         strength: "Saca energía de la electrónica cercana, aumentando su velocidad.",
         weakness: "Interfiere constantemente con el equipamiento electrónico, haciendo fácil detectarlo.",
-        notes: "Puede atacar al 65% de cordura si hay equipos electrónicos encendidos cerca."
+        interestingData: [
+            "Puede atacar al 65% de cordura si hay equipos electrónicos encendidos cerca."
+        ]
     },
     {
-        name: "Obake",
-        evidences: ["emf", "huellas", "orbes"],
-        strength: "Rara vez deja huellas dactilares y estas desaparecen muy rápido.",
-        weakness: "A veces deja huellas únicas con 6 dedos.",
-        notes: "En cacería tiene un 6.6% de probabilidad de cambiar de modelo de fantasma por un instante."
-    },
-    {
-        name: "Moroi",
-        evidences: ["box", "escritura", "temperatura"],
-        strength: "Se vuelve más rápido a medida que baja la cordura promedio de los investigadores.",
-        weakness: "El incienso lo ciega el doble de tiempo durante las cacerías (12s).",
-        notes: "Maldice a los jugadores a través de la Caja Espectral o Micrófono Parabólico reduciendo la cordura al doble."
+        name: "Sombra (Shade)",
+        evidences: ["emf", "escritura", "temperatura"],
+        strength: "Es muy difícil de encontrar debido a su timidez.",
+        weakness: "No iniciará una cacería si hay varias personas cerca.",
+        interestingData: [
+            "Rara vez realiza eventos de fantasma si hay más de 1 persona en la habitación."
+        ]
     },
     {
         name: "Thaye",
         evidences: ["orbes", "escritura", "dots"],
         strength: "Al entrar en la zona, el Thaye se vuelve muy activo, rápido y agresivo.",
         weakness: "Envejece con el tiempo cuando los jugadores están cerca, volviéndose más lento y pasivo.",
-        notes: "No sufre aceleración en cacería por visión directa (no hace ramp-up de velocidad)."
+        interestingData: [
+            "No sufre aceleración en cacería por visión directa (no hace ramp-up de velocidad)."
+        ]
+    },
+    {
+        name: "Yokai",
+        evidences: ["box", "orbes", "dots"],
+        strength: "Hablar cerca del Yokai lo enfurece y aumenta la probabilidad de ataque.",
+        weakness: "Durante una cacería solo puede escuchar voces a corta distancia (~2.5m).",
+        interestingData: [
+            "Puede atacar al 80% de cordura si se habla cerca de él."
+        ]
+    },
+    {
+        name: "Yurei",
+        evidences: ["orbes", "temperatura", "dots"],
+        strength: "Suele tener una gran influencia sobre la cordura de las personas.",
+        weakness: "Usar incienso en su habitación lo atrapa en ella por 90 segundos.",
+        interestingData: [
+            "Puede cerrar puertas de golpe quitando un 15% de cordura instantáneamente."
+        ]
     }
 ];
 
@@ -221,7 +326,6 @@ EVIDENCE_TYPES.forEach(e => evidenceState[e.id] = 0);
 
 // Fantasmas cerrados manualmente por el usuario
 const manuallyClosedGhosts = new Set();
-const ghostNotes = {};
 
 // Verificar si un fantasma es posible según las pruebas seleccionadas
 function isGhostPossible(ghost) {
@@ -368,25 +472,27 @@ function renderGhosts() {
         // Información detallada
         const infoDiv = document.createElement("div");
         infoDiv.className = "ghost-info";
+
+        let interestingDataHtml = "";
+        if (ghost.interestingData && ghost.interestingData.length > 0) {
+            const listItems = ghost.interestingData.map(item => `<li>${item}</li>`).join("");
+            interestingDataHtml = `
+                <div class="info-row-data">
+                    <span class="data-title">💡 <b>Datos de interés:</b></span>
+                    <ul class="data-list">${listItems}</ul>
+                </div>
+            `;
+        }
+
         infoDiv.innerHTML = `
             <div class="info-row"><span class="info-icon">⚠️</span><span><b>Fortaleza:</b> ${ghost.strength}</span></div>
             <div class="info-row"><span class="info-icon">✅</span><span><b>Debilidad:</b> ${ghost.weakness}</span></div>
-            ${ghost.notes ? `<div class="info-row"><span class="info-icon">💡</span><span><b>Notas:</b> ${ghost.notes}</span></div>` : ''}
+            ${interestingDataHtml}
         `;
-
-        // Input de Notas
-        const notesInput = document.createElement("input");
-        notesInput.className = "notes-input";
-        notesInput.placeholder = "Escribir notas aquí...";
-        notesInput.value = ghostNotes[ghost.name] || "";
-        notesInput.oninput = (e) => {
-            ghostNotes[ghost.name] = e.target.value;
-        };
 
         card.appendChild(header);
         card.appendChild(pillsDiv);
         card.appendChild(infoDiv);
-        card.appendChild(notesInput);
 
         gridEl.appendChild(card);
     });
