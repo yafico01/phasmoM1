@@ -194,20 +194,30 @@ body {
     margin-top: 1px;
 }
 
-.notes-input {
-    width: 100%;
-    background-color: #161616;
-    border: 1px solid #2a2a2a;
-    color: #aaa;
-    padding: 8px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    outline: none;
+/* Estilos de Datos de Interés */
+.info-row-data {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.notes-input:focus {
-    border-color: #d4af37;
-    color: #fff;
+.data-title {
+    color: #e0e0e0;
+}
+
+.data-list {
+    margin-left: 20px;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.data-list li {
+    font-size: 12px;
+    color: #cccccc;
+    line-height: 1.35;
 }
 
 /* Sidebar Styling */
