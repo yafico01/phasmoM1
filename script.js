@@ -234,7 +234,7 @@ const GHOSTS_DATA = [
     // --- FILA 7 ---
     {
         name: "Ente",
-        evidences: ["box", "orbes", "dots"],
+        evidences: ["box", "huellas", "dots"],
         strength: "Mirar a un Ente reducirá drásticamente tu cordura.",
         weakness: "Sacarle una foto al Ente hará que desaparezca temporalmente.",
         interestingData: [
