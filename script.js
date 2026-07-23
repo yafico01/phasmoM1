@@ -1,3 +1,14 @@
+// Pruebas Oficiales
+const EVIDENCE_TYPES = [
+    { id: "emf", name: "Medidor EMF 5", icon: "📊" },
+    { id: "dots", name: "Proyector D.O.T.S.", icon: "🟢" },
+    { id: "escritura", name: "Escritura Fantasma", icon: "📖" },
+    { id: "huellas", name: "Ultravioleta", icon: "✋" },
+    { id: "orbes", name: "Orbes espectrales", icon: "⭐" },
+    { id: "box", name: "Caja Espectral", icon: "🔊" },
+    { id: "temperatura", name: "Temperaturas Heladas", icon: "🌡️" }
+];
+
 // Base de Datos Completa de Fantasmas (30 en Total - Nombres y orden corregidos)
 const GHOSTS_DATA = [
     // Fila 1
@@ -334,3 +345,192 @@ const GHOSTS_DATA = [
         ]
     }
 ];
+
+// Estado de Pruebas: { [id]: 0 (neutral), 1 (incluida/verde), 2 (excluida/roja) }
+const evidenceState = {};
+EVIDENCE_TYPES.forEach(e => evidenceState[e.id] = 0);
+
+// Fantasmas cerrados manualmente por el usuario
+const manuallyClosedGhosts = new Set();
+
+// Verificar si un fantasma es posible según las pruebas seleccionadas
+function isGhostPossible(ghost) {
+    const activeEvidences = Object.keys(evidenceState).filter(k => evidenceState[k] === 1);
+    const excludedEvidences = Object.keys(evidenceState).filter(k => evidenceState[k] === 2);
+
+    // Regla especial del Mímico (Nativa / Siempre Activa)
+    if (ghost.name === "Mímico") {
+        const mimicAllEvidences = ["box", "huellas", "temperatura", "orbes"];
+
+        for (let exc of excludedEvidences) {
+            if (mimicAllEvidences.includes(exc)) return false;
+        }
+
+        for (let act of activeEvidences) {
+            if (!mimicAllEvidences.includes(act)) return false;
+        }
+
+        return true;
+    }
+
+    // Reglas normales
+    for (let act of activeEvidences) {
+        if (!ghost.evidences.includes(act)) return false;
+    }
+
+    for (let exc of excludedEvidences) {
+        if (ghost.evidences.includes(exc)) return false;
+    }
+
+    return true;
+}
+
+// Cuenta cuántos de los fantasmas actualmente posibles poseen esta prueba
+function countGhostsWithEvidence(evId) {
+    return GHOSTS_DATA.filter(ghost => {
+        if (manuallyClosedGhosts.has(ghost.name)) return false;
+        if (!isGhostPossible(ghost)) return false;
+
+        return ghost.evidences.includes(evId) || (ghost.name === "Mímico" && evId === "orbes");
+    }).length;
+}
+
+// Renderizar Botones de Pruebas en la columna lateral
+function renderEvidences() {
+    const listEl = document.getElementById("evidenceList");
+    listEl.innerHTML = "";
+
+    EVIDENCE_TYPES.forEach(ev => {
+        const state = evidenceState[ev.id];
+        const possibleGhostsCount = countGhostsWithEvidence(ev.id);
+
+        if (possibleGhostsCount === 0 && state === 0) {
+            return;
+        }
+
+        const btn = document.createElement("div");
+        btn.className = `evidence-btn state-${state}`;
+
+        let statusIcon = "";
+        if (state === 1) statusIcon = "✓";
+        if (state === 2) statusIcon = "✕";
+
+        btn.innerHTML = `
+            <div class="evidence-icon">${ev.icon}</div>
+            <div class="evidence-info">
+                <span class="evidence-name">${ev.name}</span>
+                <span class="evidence-count">${possibleGhostsCount} fantasmas</span>
+            </div>
+            <div class="evidence-status-icon">${statusIcon}</div>
+        `;
+
+        btn.onclick = () => {
+            evidenceState[ev.id] = (evidenceState[ev.id] + 1) % 3;
+            renderApp();
+        };
+
+        listEl.appendChild(btn);
+    });
+}
+
+// Renderizar Tarjetas de Fantasmas
+function renderGhosts() {
+    const gridEl = document.getElementById("ghostGrid");
+    gridEl.innerHTML = "";
+
+    GHOSTS_DATA.forEach(ghost => {
+        const isPossible = isGhostPossible(ghost) && !manuallyClosedGhosts.has(ghost.name);
+
+        if (!isPossible) return;
+
+        const card = document.createElement("div");
+        card.className = "ghost-card possible";
+
+        // Cabecera de la tarjeta
+        const header = document.createElement("div");
+        header.className = "ghost-header";
+        
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "ghost-name";
+        nameSpan.innerHTML = `${ghost.name} ${ghost.isNew ? '<span class="badge-new">NUEVO</span>' : ''}`;
+
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn";
+        closeBtn.innerText = "✕";
+        closeBtn.title = "Descartar fantasma";
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            manuallyClosedGhosts.add(ghost.name);
+            renderApp();
+        };
+
+        header.appendChild(nameSpan);
+        header.appendChild(closeBtn);
+
+        // Etiquetas de Pruebas
+        const pillsDiv = document.createElement("div");
+        pillsDiv.className = "evidence-pills";
+
+        let ghostEvList = [...ghost.evidences];
+        if (ghost.name === "Mímico") {
+            ghostEvList.push("orbes");
+        }
+
+        ghostEvList.forEach(evId => {
+            const evObj = EVIDENCE_TYPES.find(e => e.id === evId);
+            if (!evObj) return;
+
+            const pill = document.createElement("span");
+            const state = evidenceState[evId];
+
+            let pillClass = "pill inactive";
+            if (state === 1) pillClass = "pill active";
+            if (state === 2) pillClass = "pill excluded";
+
+            pill.className = pillClass;
+            pill.innerText = evObj.name;
+            pillsDiv.appendChild(pill);
+        });
+
+        // Información detallada
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "ghost-info";
+
+        let interestingDataHtml = "";
+        if (ghost.interestingData && ghost.interestingData.length > 0) {
+            const listItems = ghost.interestingData.map(item => `<li>${item}</li>`).join("");
+            interestingDataHtml = `
+                <div class="info-row-data">
+                    <span class="data-title">💡 <b>Datos de interés:</b></span>
+                    <ul class="data-list">${listItems}</ul>
+                </div>
+            `;
+        }
+
+        infoDiv.innerHTML = `
+            <div class="info-row"><span class="info-icon">⚠️</span><span><b>Fortaleza:</b> ${ghost.strength}</span></div>
+            <div class="info-row"><span class="info-icon">✅</span><span><b>Debilidad:</b> ${ghost.weakness}</span></div>
+            ${interestingDataHtml}
+        `;
+
+        card.appendChild(header);
+        card.appendChild(pillsDiv);
+        card.appendChild(infoDiv);
+
+        gridEl.appendChild(card);
+    });
+}
+
+function renderApp() {
+    renderGhosts();
+    renderEvidences();
+}
+
+function resetAll() {
+    EVIDENCE_TYPES.forEach(e => evidenceState[e.id] = 0);
+    manuallyClosedGhosts.clear();
+    renderApp();
+}
+
+// Inicializar Aplicación
+renderApp();
