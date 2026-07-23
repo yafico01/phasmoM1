@@ -1,4 +1,6 @@
-// Pruebas Oficiales
+// ==========================================
+// 1. PRUEBAS OFICIALES
+// ==========================================
 const EVIDENCE_TYPES = [
     { id: "emf", name: "Medidor EMF 5", icon: "📊" },
     { id: "dots", name: "Proyector D.O.T.S.", icon: "🟢" },
@@ -9,9 +11,11 @@ const EVIDENCE_TYPES = [
     { id: "temperatura", name: "Temperaturas Heladas", icon: "🌡️" }
 ];
 
-// Base de Datos Completa de Fantasmas (30 en Total - Nombres y orden corregidos)
+// ==========================================
+// 2. BASE DE DATOS (30 FANTASMAS EN ORDEN)
+// ==========================================
 const GHOSTS_DATA = [
-    // Fila 1
+    // --- FILA 1 ---
     {
         name: "Asuang",
         isNew: true,
@@ -45,7 +49,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 2
+    // --- FILA 2 ---
     {
         name: "Deildegast",
         isNew: true,
@@ -79,7 +83,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 3
+    // --- FILA 3 ---
     {
         name: "Gallu",
         isNew: true,
@@ -117,7 +121,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 4
+    // --- FILA 4 ---
     {
         name: "Jinn",
         evidences: ["emf", "huellas", "temperatura"],
@@ -153,7 +157,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 5
+    // --- FILA 5 ---
     {
         name: "Moroi",
         evidences: ["box", "escritura", "temperatura"],
@@ -190,7 +194,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 6
+    // --- FILA 6 ---
     {
         name: "Obambo",
         isNew: true,
@@ -227,7 +231,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 7
+    // --- FILA 7 ---
     {
         name: "Ente",
         evidences: ["box", "orbes", "dots"],
@@ -257,7 +261,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 8
+    // --- FILA 8 ---
     {
         name: "Revenant",
         evidences: ["orbes", "escritura", "temperatura"],
@@ -286,7 +290,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 9
+    // --- FILA 9 ---
     {
         name: "Thaye",
         evidences: ["orbes", "escritura", "dots"],
@@ -316,7 +320,7 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // Fila 10
+    // --- FILA 10 ---
     {
         name: "Espectro (Wraith)",
         evidences: ["emf", "box", "dots"],
@@ -346,19 +350,18 @@ const GHOSTS_DATA = [
     }
 ];
 
-// Estado de Pruebas: { [id]: 0 (neutral), 1 (incluida/verde), 2 (excluida/roja) }
+// ==========================================
+// 3. ESTADO Y CONTROL
+// ==========================================
 const evidenceState = {};
 EVIDENCE_TYPES.forEach(e => evidenceState[e.id] = 0);
 
-// Fantasmas cerrados manualmente por el usuario
 const manuallyClosedGhosts = new Set();
 
-// Verificar si un fantasma es posible según las pruebas seleccionadas
 function isGhostPossible(ghost) {
     const activeEvidences = Object.keys(evidenceState).filter(k => evidenceState[k] === 1);
     const excludedEvidences = Object.keys(evidenceState).filter(k => evidenceState[k] === 2);
 
-    // Regla especial del Mímico (Nativa / Siempre Activa)
     if (ghost.name === "Mímico") {
         const mimicAllEvidences = ["box", "huellas", "temperatura", "orbes"];
 
@@ -373,7 +376,6 @@ function isGhostPossible(ghost) {
         return true;
     }
 
-    // Reglas normales
     for (let act of activeEvidences) {
         if (!ghost.evidences.includes(act)) return false;
     }
@@ -385,7 +387,6 @@ function isGhostPossible(ghost) {
     return true;
 }
 
-// Cuenta cuántos de los fantasmas actualmente posibles poseen esta prueba
 function countGhostsWithEvidence(evId) {
     return GHOSTS_DATA.filter(ghost => {
         if (manuallyClosedGhosts.has(ghost.name)) return false;
@@ -395,9 +396,12 @@ function countGhostsWithEvidence(evId) {
     }).length;
 }
 
-// Renderizar Botones de Pruebas en la columna lateral
+// ==========================================
+// 4. RENDERIZADO
+// ==========================================
 function renderEvidences() {
     const listEl = document.getElementById("evidenceList");
+    if (!listEl) return;
     listEl.innerHTML = "";
 
     EVIDENCE_TYPES.forEach(ev => {
@@ -433,9 +437,9 @@ function renderEvidences() {
     });
 }
 
-// Renderizar Tarjetas de Fantasmas
 function renderGhosts() {
     const gridEl = document.getElementById("ghostGrid");
+    if (!gridEl) return;
     gridEl.innerHTML = "";
 
     GHOSTS_DATA.forEach(ghost => {
@@ -446,7 +450,6 @@ function renderGhosts() {
         const card = document.createElement("div");
         card.className = "ghost-card possible";
 
-        // Cabecera de la tarjeta
         const header = document.createElement("div");
         header.className = "ghost-header";
         
@@ -467,7 +470,6 @@ function renderGhosts() {
         header.appendChild(nameSpan);
         header.appendChild(closeBtn);
 
-        // Etiquetas de Pruebas
         const pillsDiv = document.createElement("div");
         pillsDiv.className = "evidence-pills";
 
@@ -492,7 +494,6 @@ function renderGhosts() {
             pillsDiv.appendChild(pill);
         });
 
-        // Información detallada
         const infoDiv = document.createElement("div");
         infoDiv.className = "ghost-info";
 
@@ -532,5 +533,14 @@ function resetAll() {
     renderApp();
 }
 
-// Inicializar Aplicación
+// Configurar botón Reiniciar si existe en el HTML
+document.addEventListener("DOMContentLoaded", () => {
+    const resetBtn = document.querySelector(".btn-reset") || document.getElementById("resetBtn");
+    if (resetBtn) {
+        resetBtn.onclick = resetAll;
+    }
+    renderApp();
+});
+
+// Llamada inicial por respaldo
 renderApp();
