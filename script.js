@@ -9,9 +9,9 @@ const EVIDENCE_TYPES = [
     { id: "temperatura", name: "Temperaturas Heladas", icon: "🌡️" }
 ];
 
-// Base de Datos Completa de Fantasmas (30 en total)
+// Base de Datos Completa de Fantasmas (Ordenada exactamente según la imagen)
 const GHOSTS_DATA = [
-    // --- FANTASMAS ACTUALIZADOS / NUEVOS ---
+    // Fila 1
     {
         name: "Asuang",
         isNew: true,
@@ -44,6 +44,8 @@ const GHOSTS_DATA = [
             "Si los jugadores permanecen quietos, no ataca hasta el 50%."
         ]
     },
+
+    // Fila 2
     {
         name: "Deildegast",
         isNew: true,
@@ -76,6 +78,8 @@ const GHOSTS_DATA = [
             "Ataque en 40% promedio de cordura."
         ]
     },
+
+    // Fila 3
     {
         name: "Gallu",
         isNew: true,
@@ -112,6 +116,8 @@ const GHOSTS_DATA = [
             "En dificultad pesadilla o superior(1 o 2 pruebas), siempre tendra temperaturas heladas."
         ]
     },
+
+    // Fila 4
     {
         name: "Jinn",
         evidences: ["emf", "huellas", "temperatura"],
@@ -136,7 +142,7 @@ const GHOSTS_DATA = [
         ]
     },
     {
-        name: "Pesadilla (Mare)",
+        name: "Pesadilla",
         evidences: ["box", "orbes", "escritura"],
         strength: "Las habitaciones a oscuras aumentan notablemente sus probabilidades de atacar.",
         weakness: "Encender las luces de su entorno reducirá su agresividad de forma drástica.",
@@ -146,6 +152,8 @@ const GHOSTS_DATA = [
             "Al encender un jugador las luces de un cuarto, podra apagarla al instante que el jugador accione el interruptor."
         ]
     },
+
+    // Fila 5
     {
         name: "Moroi",
         evidences: ["box", "escritura", "temperatura"],
@@ -181,6 +189,8 @@ const GHOSTS_DATA = [
             "Ataca a partir del 50 % de cordura media."
         ]
     },
+
+    // Fila 6
     {
         name: "Obambo",
         isNew: true,
@@ -217,51 +227,14 @@ const GHOSTS_DATA = [
         ]
     },
 
-    // --- RESTANTES DE LA LISTA ORIGINAL (PROCESADOS AL NUEVO FORMATO) ---
+    // Fila 7
     {
-        name: "Aparecido (Revenant)",
-        evidences: ["orbes", "escritura", "temperatura"],
-        strength: "Se mueve a velocidad significativamente alta cuando persigue a una víctima.",
-        weakness: "Esconderse del Aparecido hará que se mueva muy lentamente.",
-        interestingData: [
-            "Velocidad extrema cuando ve a un jugador, súper lento cuando pierde la visión."
-        ]
-    },
-    {
-        name: "Espectro (Wraith)",
+        name: "Ente",
         evidences: ["emf", "box", "dots"],
-        strength: "Casi nunca toca el suelo y no deja huellas al pisar sal.",
-        weakness: "Tiene una reacción tóxica a la sal.",
+        strength: "Mirar a un Ente reducirá drásticamente tu cordura.",
+        weakness: "Sacarle una foto al Ente hará que desaparezca temporalmente.",
         interestingData: [
-            "Puede teletransportarse al lado de un jugador aleatorio fuera de cacería generando lectura EMF 2/5."
-        ]
-    },
-    {
-        name: "Espíritu (Spirit)",
-        evidences: ["emf", "box", "escritura"],
-        strength: "No tiene fortalezas particulares.",
-        weakness: "Usar incienso cerca de él lo detendrá e impedirá que ataque durante un largo tiempo (180s).",
-        interestingData: [
-            "El incienso evita cacerías por 180 segundos (en vez de 90s)."
-        ]
-    },
-    {
-        name: "Los Gemelos (The Twins)",
-        evidences: ["emf", "box", "temperatura"],
-        strength: "Cualquiera de los dos gemelos puede enfadarse e iniciar un ataque.",
-        weakness: "Interactúan con el entorno al mismo tiempo.",
-        interestingData: [
-            "Un gemelo es más lento pero está en la sala principal; el otro es más rápido y ataca desde lejos."
-        ]
-    },
-    {
-        name: "Mímico",
-        evidences: ["box", "huellas", "temperatura"],
-        fakeEvidence: "orbes",
-        strength: "Pueden imitar la conducta de cualquier otro fantasma.",
-        weakness: "Aparecen orbes espectrales en la habitación del fantasma como cuarta prueba falsa.",
-        interestingData: [
-            "Presenta siempre Caja Espectral, Ultravioleta, Temperaturas Heladas + Orbes Espectrales permanentes."
+            "Mirarlo directamente drena la cordura rápidamente."
         ]
     },
     {
@@ -282,8 +255,19 @@ const GHOSTS_DATA = [
             "Puede atacar al 65% de cordura si hay equipos electrónicos encendidos cerca."
         ]
     },
+
+    // Fila 8
     {
-        name: "Sombra (Shade)",
+        name: "Revenant",
+        evidences: ["orbes", "escritura", "temperatura"],
+        strength: "Se mueve a velocidad significativamente alta cuando persigue a una víctima.",
+        weakness: "Esconderse del Aparecido hará que se mueva muy lentamente.",
+        interestingData: [
+            "Velocidad extrema cuando ve a un jugador, súper lento cuando pierde la visión."
+        ]
+    },
+    {
+        name: "Sombra",
         evidences: ["emf", "escritura", "temperatura"],
         strength: "Es muy difícil de encontrar debido a su timidez.",
         weakness: "No iniciará una cacería si hay varias personas cerca.",
@@ -292,12 +276,53 @@ const GHOSTS_DATA = [
         ]
     },
     {
+        name: "Espíritu",
+        evidences: ["emf", "box", "escritura"],
+        strength: "No tiene fortalezas particulares.",
+        weakness: "Usar incienso cerca de él lo detendrá e impedirá que ataque durante un largo tiempo (180s).",
+        interestingData: [
+            "El incienso evita cacerías por 180 segundos (en vez de 90s)."
+        ]
+    },
+
+    // Fila 9
+    {
         name: "Thaye",
         evidences: ["orbes", "escritura", "dots"],
         strength: "Al entrar en la zona, el Thaye se vuelve muy activo, rápido y agresivo.",
         weakness: "Envejece con el tiempo cuando los jugadores están cerca, volviéndose más lento y pasivo.",
         interestingData: [
             "No sufre aceleración en cacería por visión directa (no hace ramp-up de velocidad)."
+        ]
+    },
+    {
+        name: "Mímico",
+        evidences: ["box", "huellas", "temperatura"],
+        fakeEvidence: "orbes",
+        strength: "Pueden imitar la conducta de cualquier otro fantasma.",
+        weakness: "Aparecen orbes espectrales en la habitación del fantasma como cuarta prueba falsa.",
+        interestingData: [
+            "Presenta siempre Caja Espectral, Ultravioleta, Temperaturas Heladas + Orbes Espectrales permanentes."
+        ]
+    },
+    {
+        name: "Gemelos",
+        evidences: ["emf", "box", "temperatura"],
+        strength: "Cualquiera de los dos gemelos puede enfadarse e iniciar un ataque.",
+        weakness: "Interactúan con el entorno al mismo tiempo.",
+        interestingData: [
+            "Un gemelo es más lento pero está en la sala principal; el otro es más rápido y ataca desde lejos."
+        ]
+    },
+
+    // Fila 10
+    {
+        name: "Espectro",
+        evidences: ["emf", "box", "dots"],
+        strength: "Casi nunca toca el suelo y no deja huellas al pisar sal.",
+        weakness: "Tiene una reacción tóxica a la sal.",
+        interestingData: [
+            "Puede teletransportarse al lado de un jugador aleatorio fuera de cacería generando lectura EMF 2/5."
         ]
     },
     {
@@ -378,7 +403,7 @@ function renderEvidences() {
         const state = evidenceState[ev.id];
         const possibleGhostsCount = countGhostsWithEvidence(ev.id);
 
-        // OCULTAR PRUEBA: Si no la tiene ningún fantasma posible y no está marcada (estado neutral 0)
+        // Ocultar la prueba solo si el contador llega a cero Y no está marcada actualmente
         if (possibleGhostsCount === 0 && state === 0) {
             return;
         }
@@ -399,7 +424,7 @@ function renderEvidences() {
             <div class="evidence-status-icon">${statusIcon}</div>
         `;
 
-        // Cambio de estado al hacer click: Neutral (0) -> Incluido (1) -> Excluido (2) -> Neutral (0)
+        // Alternar estados: Neutral (0) -> Incluido (1) -> Excluido (2) -> Neutral (0)
         btn.onclick = () => {
             evidenceState[ev.id] = (evidenceState[ev.id] + 1) % 3;
             renderApp();
@@ -417,7 +442,6 @@ function renderGhosts() {
     GHOSTS_DATA.forEach(ghost => {
         const isPossible = isGhostPossible(ghost) && !manuallyClosedGhosts.has(ghost.name);
 
-        // OCULTAR FANTASMA: Si ya no es posible según las pruebas o fue descartado manualmente
         if (!isPossible) return;
 
         const card = document.createElement("div");
@@ -444,7 +468,7 @@ function renderGhosts() {
         header.appendChild(nameSpan);
         header.appendChild(closeBtn);
 
-        // Etiquetas de Pruebas (Pills)
+        // Etiquetas de Pruebas
         const pillsDiv = document.createElement("div");
         pillsDiv.className = "evidence-pills";
 
