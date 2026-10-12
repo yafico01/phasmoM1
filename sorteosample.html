@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba Sorteo Twitch</title>
+    <style>
+        body {
+            background-color: #0e0e10;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+        .container {
+            background: rgba(18, 18, 26, 0.95);
+            border: 3px solid #9146FF;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            width: 420px;
+            box-shadow: 0 0 30px rgba(145, 70, 255, 0.5);
+            position: relative;
+        }
+        .logo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 3px solid #bf94ff;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        h2 {
+            margin: 0 0 15px 0;
+            color: #bf94ff;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Visor de la ruleta deslizante */
+        .slot-machine {
+            height: 70px;
+            background: #0a0a0f;
+            border-radius: 12px;
+            border: 2px solid #333;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .slot-list {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            /* 10 segundos de animación con curva suave al frenar */
+            transition: top 10s cubic-bezier(0.05, 0.85, 0.15, 1);
+        }
+        .slot-item {
+            height: 70px;
+            line-height: 70px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        
+        /* Controles de Botones */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        .btn {
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-sortear {
+            background-color: #9146FF;
+            color: white;
+            box-shadow: 0 4px 10px rgba(145, 70, 255, 0.4);
+            flex: 2;
+        }
+        .btn-sortear:hover { background-color: #772ce8; }
+        
+        .btn-reset {
+            background-color: #3a3a4d;
+            color: #ddd;
+            flex: 1;
+        }
+        .btn-reset:hover { background-color: #4e4e67; color: white; }
+
+        .btn:active { transform: scale(0.95); }
+
+        .winner-box {
+            font-size: 26px;
+            color: #00ffcc;
+            font-weight: bold;
+            text-shadow: 0 0 12px rgba(0, 255, 204, 0.8);
+            margin-top: 5px;
+            animation: bounce 0.8s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
+        }
+
+        /* EFX Fuegos Artificiales en CSS Puro */
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: none;
+            animation: explode 1.2s infinite ease-out;
+        }
+        .fw-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .fw-2 { top: 15%; right: 10%; animation-delay: 0.4s; }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 #ff0055, 0 0 0 0 #00ffff, 0 0 0 0 #ffcc00, 0 0 0 0 #ff00ff; }
+            100% { transform: scale(1.2); opacity: 0; box-shadow: -60px -60px 0 12px transparent, 60px -60px 0 12px transparent, -60px 60px 0 12px transparent, 60px 60px 0 12px transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- EFX Fuegos Artificiales -->
+        <div id="fw1" class="firework fw-1"></div>
+        <div id="fw2" class="firework fw-2"></div>
+
+        <!-- GIF oficial seleccionado -->
+        <img src="https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" class="logo" alt="Logo Canal">
+        <h2 id="tituloSorteo">Sorteo de Prueba</h2>
+
+        <div class="slot-machine">
+            <div id="slotList" class="slot-list">
+                <div class="slot-item">¡Listo para iniciar!</div>
+            </div>
+        </div>
+
+        <div id="controlesArea">
+            <div class="button-group">
+                <button class="btn btn-sortear" onclick="iniciarSorteo()">¡Iniciar Sorteo!</button>
+                <button class="btn btn-reset" onclick="resetearSorteo()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const participantes = [
+            "AlexGamer", "LuciaVT", "Carlos_99", "Mariana_Dev", 
+            "PedroStream", "SofiaSky", "JuanchoPro", "Valeria_Art", 
+            "KikeTwitch", "AndreaBoss"
+        ];
+
+        const slotList = document.getElementById('slotList');
+        const controlesArea = document.getElementById('controlesArea');
+        const fw1 = document.getElementById('fw1');
+        const fw2 = document.getElementById('fw2');
+
+        function cargarRuletaInicial() {
+            let htmlContent = '';
+            // Se repite la lista muchas más veces para soportar los 10 segundos de giro continuo
+            for (let i = 0; i < 15; i++) {
+                participantes.forEach(p => {
+                    htmlContent += `<div class="slot-item">${p}</div>`;
+                });
+            }
+            slotList.innerHTML = htmlContent;
+            // Quitamos la transición temporalmente para reubicar al inicio de golpe sin animación
+            slotList.style.transition = 'none';
+            slotList.style.top = '0px';
+        }
+
+        cargarRuletaInicial();
+
+        function iniciarSorteo() {
+            // Desactivar fuegos artificiales y cambiar texto mientras gira
+            fw1.style.display = "none";
+            fw2.style.display = "none";
+            
+            // Volver a activar la transición de 10 segundos exacta
+            slotList.style.transition = 'top 10s cubic-bezier(0.05, 0.85, 0.15, 1)';
+
+            // Elegir un ganador al azar
+            const randomIndex = Math.floor(Math.random() * participantes.length);
+            const ganadorFinal = participantes[randomIndex];
+
+            // Calcular posición de parada lejana (por ejemplo, en la vuelta 10 de la lista repetida)
+            let targetIndex = (participantes.length * 10) + randomIndex;
+            let itemHeight = 70;
+            let targetTop = -(targetIndex * itemHeight);
+
+            // Ejecutar animación de desplazamiento largo (10 segundos)
+            slotList.style.top = targetTop + 'px';
+
+            // Mostrar el ganador y fuegos artificiales exactamente al cumplirse los 10 segundos
+            setTimeout(() => {
+                controlesArea.innerHTML = `
+                    <div class="winner-box">🎉 @${ganadorFinal} 🎉</div>
+                    <div class="button-group" style="margin-top: 15px;">
+                        <button class="btn btn-reset" onclick="resetearSorteo()" style="width: 100%;">🔄 Nuevo Sorteo / Reset</button>
+                    </div>
+                `;
+                fw1.style.display = "block";
+                fw2.style.display = "block";
+            }, 10000);
+        }
+
+        function resetearSorteo() {
+            // Reiniciar efectos, estado visual y la ruleta a la posición inicial
+            fw1.style.display = "none";
+            fw2.style.display = "none";
+            cargarRuletaInicial();
+            
+            controlesArea.innerHTML = `
+                <div class="button-group">
+                    <button class="btn btn-sortear" onclick="iniciarSorteo()">¡Iniciar Sorteo!</button>
+                    <button class="btn btn-reset" onclick="resetearSorteo()">Reset</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
